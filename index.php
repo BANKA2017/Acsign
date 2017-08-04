@@ -27,7 +27,7 @@ foreach ($str[1] as $key) {
         $cookie .= $key;
     }
 }
-$fp = fopen('settings.php',"w");
+$fp = fopen(dirname(__FILE__).'/settings.php',"w");
     flock($fp,LOCK_EX);
     fwrite($fp,'<?php'."\r\n".'$cookie='."'".$cookie."';");
     fclose($fp,LOCK_UN);
