@@ -24,12 +24,12 @@ curl_close($ch);
 preg_match_all('/Set-Cookie:(.*;)/iU',$content,$str);
 foreach ($str[1] as $key) {
     if (strpos($key,'deleted') == false){
-        $cookie .= $key;
+        $cookie1 .= $key;
     }
 }
 $fp = fopen(dirname(__FILE__).'/settings.php',"w");
     flock($fp,LOCK_EX);
-    fwrite($fp,'<?php'."\r\n".'$cookie='."'".$cookie."';");
+    fwrite($fp,'<?php'."\r\n".'$cookie='."'".$cookie1."';");
     fclose($fp,LOCK_UN);
 }else{echo "===============================<br />level:".json_decode($online,1)["level"].'<br />online:'.json_decode($online,1)["duration"].'s<br />';}
 $curl = curl_init('http://www.acfun.cn/webapi/record/actions/signin?channel=0');
