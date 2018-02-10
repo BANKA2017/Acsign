@@ -1,5 +1,5 @@
 <?php
-header("Content-type: text/html; charset=utf-8");
+set_time_limit(0);
 ignore_user_abort(true);
 require dirname(__FILE__).'/settings.php';
 $username = urlencode('');
@@ -11,7 +11,7 @@ $online=curl_exec($ol);
 curl_close($ol);
 if(json_decode($online,1)["success"]!=1){
 $url = 'http://www.acfun.cn/login.aspx';
-$data = 'username='.$username.'&password='.$password;
+$data=["username"=>$username,"password"=>$password];
 $ch = curl_init($url);
 curl_setopt($ch,CURLOPT_HEADER,1);
 curl_setopt($ch,CURLOPT_RETURNTRANSFER,1);
@@ -26,10 +26,7 @@ foreach ($str[1] as $key) {
         $cookie1 .= $key;
     }
 }
-$fp = fopen(dirname(__FILE__).'/settings.php',"w");
-    flock($fp,LOCK_EX);
-    fwrite($fp,'<?php'."\r\n".'$cookie='."'".$cookie1."';");
-    fclose($fp,LOCK_UN);
+file_put_contents(dirname(__FILE__).'/settings.php','<?php'."\r\n".'$cookie='."'".$cookie1."';");
 echo "===============================<br />已更新cookie,下次执行时将会继续挂机(签到不受影响)<br />";
 }else{echo "===============================<br />level:".json_decode($online,1)["level"].'<br />online:'.json_decode($online,1)["duration"].'s<br />';}
 $curl = curl_init('http://www.acfun.cn/webapi/record/actions/signin?channel=0');
