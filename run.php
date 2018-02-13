@@ -75,8 +75,8 @@ class Acsign
     }
     public function display()
     {
-        header('Content-Type: text/txt; charset=UTF-8');
-        echo "===============================\n>sign:{$this->sign()}\n>level:" . $this->online()["level"] . "\n>online:" . $this->online()["duration"] . "\n===============================\n";
+        header('Content-Type: text/html; charset=UTF-8');
+        echo "===============================\n>sign:{$this->sign()}\n>level:{$this->online()["level"]}\n>online:{$this->online()["duration"]}\n===============================\n";
     }
     public function fp($path, $text)
     {
