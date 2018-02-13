@@ -1,3 +1,3 @@
 # ac-sign
 acfun签到加挂机脚本<br />
-创意源自https://github.com/puteulanus/acfun-sign
+使用前请将第⑨行的帐号密码替换成自己的帐号密码，如需挂机请将cron间隔设置在0～5分钟，只需要签到不需要挂机则可将cron间隔设置为一天
