@@ -83,7 +83,7 @@ class Acsign
             return -1;
     }
 }
-$a = new Acsign($cookie, $data);
+$a = new Acsign;
 $a->cookie = $cookie;
 $a->data = $data;
 if ($a->online()["success"] != 1) {
