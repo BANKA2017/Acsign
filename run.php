@@ -1,13 +1,13 @@
 <?php
 /**
-* Author： BANKA2017
+* Author: BANKA2017
 * Version: 2.0
 */
 set_time_limit(0);
 ignore_user_abort(true);
 require dirname(__FILE__) . '/settings.php';
 
-$data = ["username" => 'YOUR_EMAIL_OR_PHONE_NUMBER', "password" => 'YOUR_PASSWORD'];//填写邮箱/手机号码，密码
+$data = ["username" => 'YOUR_EMAIL_OR_PHONE_NUMBER_OR_USERNAME', "password" => 'YOUR_PASSWORD'];//填写邮箱或手机号码或用户名，密码
 
 class Acsign
 {
@@ -25,13 +25,8 @@ class Acsign
     public function online()
     {
         $ch = $this->scurl('http://www.acfun.cn/online.aspx', $this->cookie);
-        $online = json_decode(curl_exec($ch), 1);
+        return json_decode(curl_exec($ch), 1);
         curl_close($ch);
-        if ($online["success"] != 1) {
-            return array("success" => 0, "level" => "", "duration" => "");
-        } else {
-            return $online;
-        }
     }
     /*登录获取cookie*/
     public function login()
@@ -68,14 +63,16 @@ class Acsign
             case 410004:
                 return "今日已签到";
                 break;
+            case 401:
+                return "请先登录";
+                break;
             default:
                 return "未知错误#" . $sign["code"];
-                break;
         }
     }
     public function display()
     {
-        header('Content-Type: text/html; charset=UTF-8');
+        header('Content-Type: text/txt; charset=UTF-8');
         echo "===============================\n>sign:{$this->sign()}\n>level:{$this->online()["level"]}\n>online:{$this->online()["duration"]}\n===============================\n";
     }
     public function fp($path, $text)
@@ -90,7 +87,7 @@ $a = new Acsign($cookie, $data);
 $a->cookie = $cookie;
 $a->data = $data;
 if ($a->online()["success"] != 1) {
-    $a->fp(dirname(__FILE__) . '/settings.php', '<?php' . "\r\n" . '$cookie=' . "'" . $a->login() . "';\n");
+    $a->fp(dirname(__FILE__) . '/settings.php', '<?php' . "\n" . '$cookie=' . "'" . $a->login() . "';\n");
     $a->display();
 } else 
     $a->display();
