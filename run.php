@@ -3,12 +3,11 @@
 * Author: BANKA2017
 * Version: 2.0
 */
+header('Content-Type: text/txt; charset=UTF-8');
 set_time_limit(0);
 ignore_user_abort(true);
 require dirname(__FILE__) . '/settings.php';
-
-$data = ["username" => 'YOUR_EMAIL_OR_PHONE_NUMBER_OR_USERNAME', "password" => 'YOUR_PASSWORD'];//填写邮箱或手机号码或用户名，密码
-
+require dirname(__FILE__) . '/account.php';
 class Acsign
 {
     private function scurl($url, $cookie)
@@ -41,12 +40,9 @@ class Acsign
         $cookie = '';
         preg_match_all('/Set-Cookie:(.*;)/iU', $content, $str);
         foreach ($str[1] as $key) {
-            if (strpos($key, 'deleted') == false) {
-                $cookie .= $key;
-            }
+            $cookie .= $key;
         }
         $this->cookie = $cookie;
-        return $cookie;
     }
     /*签到*/
     public function sign()
@@ -72,22 +68,27 @@ class Acsign
     }
     public function display()
     {
-        header('Content-Type: text/txt; charset=UTF-8');
-        echo "===============================\n>sign:{$this->sign()}\n>level:{$this->online()["level"]}\n>online:{$this->online()["duration"]}\n===============================\n";
+        echo "第个{$this->x}账号\n>sign:{$this->sign()}\n>level:{$this->online()["level"]}\n>online:{$this->online()["duration"]}\n===============================\n";
     }
     public function fp($path, $text)
     {
-        if (file_put_contents($path, $text))
+        if (file_put_contents($path, $text)) {
             return 0;
-         else 
+        } else {
             return -1;
+        }
     }
 }
-$a = new Acsign;
-$a->cookie = $cookie;
-$a->data = $data;
-if ($a->online()["success"] != 1) {
-    $a->fp(dirname(__FILE__) . '/settings.php', '<?php' . "\n" . '$cookie=' . "'" . $a->login() . "';\n");
+$cookie = json_decode($cookie, 1);
+echo "===============================\n";
+$a = new Acsign();
+for ($a->x = 0; $a->x < count($data); $a->x++) {
+    $a->cookie = @$cookie[$a->x];
+    $a->data = $data[$a->x];
+    if ($a->online()["success"] != 1) {
+        $a->login();
+    }
     $a->display();
-} else 
-    $a->display();
+    $cookie[$a->x] = $a->cookie;
+}
+$a->fp(dirname(__FILE__) . '/settings.php', '<?php' . "\n" . '$cookie=' . "'" . json_encode($cookie) . "';\n");

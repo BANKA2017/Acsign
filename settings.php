@@ -1,2 +1,2 @@
 <?php
-$cookie='';
+$cookie='[]';
