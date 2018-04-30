@@ -24,8 +24,9 @@ class Acsign
     public function online()
     {
         $ch = $this->scurl('http://www.acfun.cn/online.aspx', $this->cookie);
-        return json_decode(curl_exec($ch), 1);
         curl_close($ch);
+        return json_decode(curl_exec($ch), 1);
+        echo curl_exec($ch);
     }
     /*登录获取cookie*/
     public function login()
