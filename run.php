@@ -74,7 +74,7 @@ class Acsign
         curl_close($ch);
         $this->uid = json_decode($content, 1)["vdata"]["info"]["userid"];
     }
-    /*签到*/
+    /*旧签到接口*/
     public function sign()
     {
         $ch = $this->scurl('http://www.acfun.cn/webapi/record/actions/signin?channel=0', $this->cookie);
@@ -97,10 +97,34 @@ class Acsign
         }
         return $r;
     }
+    /*新签到接口*/
+    public function nsign()
+    {
+        $l = base64_encode(substr(base_convert(lcg_value(),10,36),2));
+        $ch = $this->scurl('http://www.acfun.cn/nd/pst?locationPath=signin&certified=' . $l . '&channel=0&data=' . time() . '000', $this->cookie.'stochastic=' . $l . ';');
+        curl_setopt($ch, CURLOPT_REFERER, 'http://www.acfun.cn/menber/');
+        curl_setopt($ch, CURLOPT_POST, 1);
+        $sign = json_decode(curl_exec($ch), 1);
+        curl_close($ch);
+        switch ($sign["code"]) {
+            case 200:
+                $r = "签到成功";
+                break;
+            case 410004:
+                $r = "今日已签到";
+                break;
+            case 401:
+                $r = "请先登录";
+                break;
+            default:
+                $r = "未知错误#" . $sign["code"];
+        }
+        return $r;
+    }
     /*显示*/
     public function display()
     {
-        echo $this->data["account"]["username"] . "\n - sign:{$this->sign()}\n - level:{$this->online()["level"]}\n - online:{$this->online()["duration"]}\n";
+        echo $this->data["account"]["username"] . "\n - sign:{$this->nsign()}\n - level:{$this->online()["level"]}\n - online:{$this->online()["duration"]}\n";
         if ($this->data["banana"]["number"] > 0 && $this->data["banana"]["number"] <= 5 && $this->data["banana"]["date"] == $this->getdate()) {
             echo " - ThrowBanana:今日已投蕉\n";
         } else {
