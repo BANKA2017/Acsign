@@ -150,7 +150,7 @@ class Acsign
             curl_setopt($ch,CURLOPT_HTTPHEADER,["acPlatform: ANDROID_PHONE"]);
             $sign = json_decode(curl_exec($ch) , true);
             curl_close($ch);
-            if($sign["result"] == 0){//token失效的时候我也很绝望啊
+            if(!$sign["hasSignedIn"]){//token失效的时候我也很绝望啊
                 return true;
             }else{
                 return false;
