@@ -125,6 +125,7 @@ class Acsign
             curl_setopt($ch, CURLOPT_POST, true);
             curl_setopt($ch, CURLOPT_POSTFIELDS, array("access_token" => $this->access_token));
             curl_setopt($ch,CURLOPT_ENCODING , "gzip");
+            curl_setopt($ch,CURLOPT_HTTPHEADER,["acPlatform: ANDROID_PHONE", "appVersion: 5.14.0.655"]);
             $sign = json_decode(curl_exec($ch) , true);
             curl_close($ch);
             //if($sign["result"] == -401){//token失效的时候我也很绝望啊
@@ -146,6 +147,7 @@ class Acsign
             curl_setopt($ch, CURLOPT_POST, true);
             curl_setopt($ch, CURLOPT_POSTFIELDS, array("access_token" => $this->access_token));
             curl_setopt($ch,CURLOPT_ENCODING , "gzip");
+            curl_setopt($ch,CURLOPT_HTTPHEADER,["acPlatform: ANDROID_PHONE", "appVersion: 5.14.0.655"]);
             $sign = json_decode(curl_exec($ch) , true);
             curl_close($ch);
             if(!$sign["hasSignedIn"]){//token失效的时候我也很绝望啊
