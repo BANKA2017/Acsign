@@ -1,32 +1,26 @@
-[{
-        "status": 1,
-        "signed_date": "181026",
-        "account": {
-            "username": "",
-            "password": "",
-            "cookie": "",
-            "access_token": ""
-        },
-        "banana": {
-            "userid": null,
-            "number": 0,
-            "acid": 2228862,
-            "date": 180527
-        }
-    }, {
-        "status": 0,
-        "signed_date": "181026",
-        "account": {
-            "username": "",
-            "password": "",
-            "cookie": "",
-            "access_token": ""
-        },
-        "banana": {
-            "userid": null,
-            "number": 0,
-            "acid": 2228862,
-            "date": 180527
-        }
+[
+  {
+    "status": 1,
+    "date": "20190406",
+    "account": {
+      "username": "",
+      "password": ""
+    },
+    "cookie": {
+      "access_token": "",
+      "acPasstoken": ""
     }
+  },
+  {
+    "status": 0,
+    "date": "20190406",
+    "account": {
+      "username": "",
+      "password": ""
+    },
+    "cookie": {
+      "access_token": "",
+      "acPasstoken": ""
+    }
+  }
 ]
