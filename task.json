@@ -1,7 +1,7 @@
 [
   {
     "status": 1,
-    "signed_date": "181026",
+    "date": "20181026",
     "account": {
       "username": "",
       "password": ""
@@ -12,7 +12,7 @@
   },
   {
     "status": 0,
-    "signed_date": "181026",
+    "date": "20181026",
     "account": {
       "username": "",
       "password": ""
