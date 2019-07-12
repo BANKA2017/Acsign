@@ -1,18 +1,18 @@
 <?php
+
 /**
  * Author: BANKA2017
- * Version: v4
+ * Version: 4.1
  */
 class Acsign{
-    public $username, $password, $date, $access_token, $acPasstoken;
+    public $username, $password, $date, $access_token;
     private $ch;
-    private function scurl($url, $cookie = '') {
+    private function scurl($url) {
         $this -> ch = curl_init();
         curl_setopt($this -> ch, CURLOPT_URL, $url);
-        curl_setopt($this -> ch, CURLOPT_USERAGENT, "acvideo core/5.14.0.655");
+        curl_setopt($this -> ch, CURLOPT_USERAGENT, 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/55.0.2883.87 Safari/537.36');
         curl_setopt($this -> ch, CURLOPT_CONNECTTIMEOUT, 10);
         curl_setopt($this -> ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($this -> ch, CURLOPT_COOKIE, $cookie);
         return $this;
     }
 
@@ -26,26 +26,26 @@ class Acsign{
         self::scurl('http://account.app.acfun.cn/api/account/signin/normal');
         curl_setopt($this -> ch, CURLOPT_POST, true);
         curl_setopt($this -> ch, CURLOPT_POSTFIELDS, ["username" => $this -> username, "password" => $this -> password, "cid" => "ELSH6ruK0qva88DD"]);
-        $content = curl_exec($this -> ch);
+        $json = json_decode(curl_exec($this -> ch), true);
+        if(!$json["errorid"]){
+            $this->access_token = $json["vdata"]["token"];
+        }
         curl_close($this -> ch);
-        $json = json_decode($content, true);
-        $this->access_token = $json["vdata"]["token"];
-        $this->acPasstoken = $json["vdata"]["acPasstoken"];
-        return true;
+        return $json["errorid"];
     }
 
     /*客户端签到接口*/
-    public function mo_sign()
+    public function mo_nsign()//本来不想更新的，看到6蕉想想还是更吧
     {
         if ($this->get_date() > $this -> date) {
-            self::scurl('http://api.new-app.acfun.cn/rest/app/user/signIn', "acPasstoken=" . $this->acPasstoken);
+            self::scurl('http://api.new-app.acfun.cn/rest/app/user/signIn');
             curl_setopt($this -> ch, CURLOPT_POST, true);
             curl_setopt($this -> ch, CURLOPT_POSTFIELDS, array("access_token" => $this->access_token));
             curl_setopt($this -> ch, CURLOPT_ENCODING, "gzip");
-            curl_setopt($this -> ch, CURLOPT_HTTPHEADER, ["acPlatform: ANDROID_PHONE", "appVersion: 5.14.0.655"]);
+            curl_setopt($this -> ch, CURLOPT_HTTPHEADER, ["acPlatform: ANDROID_PHONE"]);
             $sign = json_decode(curl_exec($this -> ch), true);
             curl_close($this -> ch);
-            $this -> date = $this->get_date();
+            $this->signed_date = $this->get_date();
             return $sign["msg"];
         } else {
             return "今日已签到";
@@ -54,30 +54,18 @@ class Acsign{
 
     /*客户端检查签到接口*/
     public function c_sign() {
-        self::scurl('http://api.new-app.acfun.cn/rest/app/user/hasSignedIn', "acPasstoken=" . $this -> acPasstoken);
+        self::scurl('http://api.new-app.acfun.cn/rest/app/user/hasSignedIn');
         curl_setopt($this -> ch, CURLOPT_POST, true);
         curl_setopt($this -> ch, CURLOPT_POSTFIELDS, array("access_token" => $this->access_token));
         curl_setopt($this -> ch, CURLOPT_ENCODING, "gzip");
         curl_setopt($this -> ch, CURLOPT_HTTPHEADER, ["acPlatform: ANDROID_PHONE"]);
         $sign = json_decode(curl_exec($this -> ch), true);
         curl_close($this -> ch);
-        if (!isset($sign["hasSignedIn"]) || (isset($sign["hasSignedIn"]) || !$sign["hasSignedIn"])) {
-            return false;
-        } else {
-            return true;
-        }
+        return (!isset($sign["hasSignedIn"]) || !$sign["hasSignedIn"]);
     }
 
     /*显示*/
     public function display() {
-        echo $this->username . " -> sign:" . self::mo_sign() . "\n";
-    }
-
-    public function fp($path, $text) {
-        if (file_put_contents($path, $text)) {
-            return true;
-        } else {
-            return false;
-        }
+        echo $this->username . " -> sign:" . self::mo_nsign() . "\n";
     }
 }

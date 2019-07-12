@@ -1,26 +1,24 @@
 [
   {
     "status": 1,
-    "date": "20190406",
+    "signed_date": "181026",
     "account": {
       "username": "",
       "password": ""
     },
     "cookie": {
-      "access_token": "",
-      "acPasstoken": ""
+      "access_token": ""
     }
   },
   {
     "status": 0,
-    "date": "20190406",
+    "signed_date": "181026",
     "account": {
       "username": "",
       "password": ""
     },
     "cookie": {
-      "access_token": "",
-      "acPasstoken": ""
+      "access_token": ""
     }
   }
 ]
