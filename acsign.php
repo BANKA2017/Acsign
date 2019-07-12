@@ -10,7 +10,7 @@ class Acsign{
     private function scurl($url) {
         $this -> ch = curl_init();
         curl_setopt($this -> ch, CURLOPT_URL, $url);
-        curl_setopt($this -> ch, CURLOPT_USERAGENT, 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/55.0.2883.87 Safari/537.36');
+        curl_setopt($this -> ch, CURLOPT_USERAGENT, 'acvideo core/5.14.0.655');
         curl_setopt($this -> ch, CURLOPT_CONNECTTIMEOUT, 10);
         curl_setopt($this -> ch, CURLOPT_RETURNTRANSFER, true);
         return $this;
@@ -35,7 +35,7 @@ class Acsign{
     }
 
     /*客户端签到接口*/
-    public function mo_nsign()//本来不想更新的，看到6蕉想想还是更吧
+    public function mo_nsign()
     {
         if ($this->get_date() > $this -> date) {
             self::scurl('http://api.new-app.acfun.cn/rest/app/user/signIn');
@@ -61,7 +61,7 @@ class Acsign{
         curl_setopt($this -> ch, CURLOPT_HTTPHEADER, ["acPlatform: ANDROID_PHONE"]);
         $sign = json_decode(curl_exec($this -> ch), true);
         curl_close($this -> ch);
-        return (!isset($sign["hasSignedIn"]) || !$sign["hasSignedIn"]);
+        return !(!isset($sign["hasSignedIn"]) || !$sign["hasSignedIn"]);
     }
 
     /*显示*/
