@@ -7,7 +7,9 @@
       "password": ""
     },
     "cookie": {
-      "access_token": ""
+      "access_token": "",
+      "acPasstoken": "",
+      "auth_key": ""
     }
   },
   {
@@ -18,7 +20,9 @@
       "password": ""
     },
     "cookie": {
-      "access_token": ""
+      "access_token": "",
+      "acPasstoken": "",
+      "auth_key": ""
     }
   }
 ]

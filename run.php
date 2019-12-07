@@ -17,13 +17,13 @@ if(file_exists(dirname(__FILE__) . '/task.json')){
 }elseif(IS_CLI){
     //TODO 多用户
     if(isset($argv[1]) && isset($argv[2])){
-        $data = [["status" => 1, "date" => 0, "account" => ["username" => $argv[1], "password" => $argv[2]], "token" => ["access_token" => ""]]];
+        $data = [["status" => 1,"date" => 0,"account" => ["username" => $argv[1], "password" => $argv[2]], "cookie" => ["access_token" => "", "acPasstoken" => "", "auth_key" => ""]]];
         $ut = 1;
     }else{
         die("Acsign : 缺少有效参数\n");
     }
 }elseif(isset($_REQUEST["username"]) && isset($_REQUEST["password"])){
-    $data = [["status" => 1, "date" => 0, "account" => ["username" => $_REQUEST["username"], "password" => $_REQUEST["password"]], "token" => ["access_token" => ""]]];
+    $data = [["status" => 1, "date" => 0, "account" => ["username" => $_REQUEST["username"], "password" => $_REQUEST["password"]], "cookie" => ["access_token" => "","acPasstoken" => "","auth_key" => ""]]];
     $ut = 2;
 }else{
     die("Acsign : 缺少有效参数\n");
@@ -32,9 +32,11 @@ $sign = new Acsign;
 foreach($data as $key => $value){
     //检查登录情况
     if($value["status"] && $value["date"] < $sign -> get_date()){
-        $sign -> username = $value["account"]["username"];
-        $sign -> password = $value["account"]["password"];
-        $sign -> access_token = $value["token"]["access_token"];
+        $sign->username = $value["account"]["username"];
+        $sign->password = $value["account"]["password"];
+        $sign->access_token = $value["cookie"]["access_token"];
+        $sign->acPasstoken = $value["cookie"]["acPassToken"];
+        $sign->auth_key = $value["cookie"]["auth_key"];
         $login_state = false;
         if(!$sign -> access_token || !$sign -> c_sign()){
             if($sign -> username && $sign -> password){
@@ -47,6 +49,8 @@ foreach($data as $key => $value){
             $sign -> display();
             if(!$ut){
                 $data[$key]["cookie"]["access_token"] = $sign -> access_token;
+                $data[$key]["cookie"]["acPassToken"] = $sign -> acPassToken;
+                $data[$key]["cookie"]["auth_key"] = $sign -> auth_key;
                 $data[$key]["date"] = $sign -> signed_date;
             }
         }
