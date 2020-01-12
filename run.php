@@ -25,15 +25,15 @@ $dataTemplate = [
     ]
 ];
 
-if(file_exists(__DIR__ . '/task.json')){
-    $userInfo = json_decode(file_get_contents(__DIR__ . '/task.json'), true);
-    $ut = 0;
-}elseif((isset($argv[1]) && isset($argv[2])) || (isset($_REQUEST["username"]) && isset($_REQUEST["password"]))){
+if((getenv("ACSIGN_USERNAME") && getenv("ACSIGN_PASSWORD")) || (isset($argv[1]) && isset($argv[2])) || (isset($_REQUEST["username"]) && isset($_REQUEST["password"]))){
     //TODO 多用户
     $userInfo[] = $dataTemplate;
-    $userInfo[0]["account"]["username"] = $argv[1]??$_REQUEST["username"];
-    $userInfo[0]["account"]["password"] = $argv[2]??$_REQUEST["username"];
+    $userInfo[0]["account"]["username"] = getenv("ACSIGN_USERNAME")??$argv[1]??$_REQUEST["username"];
+    $userInfo[0]["account"]["password"] = getenv("ACSIGN_PASSWORD")??$argv[2]??$_REQUEST["username"];
     $ut = 1;
+}elseif(file_exists(__DIR__ . '/task.json')){
+    $userInfo = json_decode(file_get_contents(__DIR__ . '/task.json'), true);
+    $ut = 0;
 }else{
     die("Acsign : 缺少有效参数或文件\n");
 }

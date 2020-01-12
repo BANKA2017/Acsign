@@ -1,0 +1,26 @@
+name: 'Acsign'
+
+on:
+  push:
+  schedule:
+    - cron: '0 17 * * *' # 北京时间凌晨1点
+
+jobs:
+  acsign:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v1
+        with:
+          php-version: '7.4'
+
+      - name: 'Sign'
+        env:
+          ACSIGN_USERNAME: ${{ secrets.ACSIGN_USERNAME }}
+          ACSIGN_PASSWORD: ${{ secrets.ACSIGN_PASSWORD }}
+        run: php run.php
